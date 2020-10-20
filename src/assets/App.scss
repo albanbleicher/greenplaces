@@ -70,16 +70,25 @@
     font-style: normal;
     font-display: swap;
 }
-
+@import './animations.scss';
 
 // Variables
-$main-light: #ECEBE9;
-$green: #117A4E;
+$main-light: #1A1A1A;
+$green: #EFECE4;
 html, body {
     margin:0;
     padding:0;
     background-color: $main-light;
     height: 100%;
+    font-family: 'GTCinetypeRegular', 'Avenir', 'Open Sans', 'Arial', sans-serif;
+}
+.bg {
+    height: 1000px;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    z-index: 0;
+    background-image: url('./bg.png');
 }
 #app {
     height: 100%;
@@ -101,11 +110,12 @@ html, body {
             outline: 0 none;
         }
         .headline-content {
+            margin: 40px 0;
             position: relative;
             text-align: center;
             z-index: 99;
             h1 {
-                margin:120px 0;
+                margin: 0;
                 font-family: 'Lobular';
                 color: $green;
                 font-size: 130px;
@@ -117,6 +127,39 @@ html, body {
                 color: $green;
                 font-size: 25px;
             }
+            
+        }
+        .cta-scroll {
+            animation: float 3s alternate infinite ease-out;
+        }
+        .headline-data {
+            font-family: 'GTCinetypeLight';
+            font-size: 15px;
+            .label {
+                color:rgba(255,255,255,0.5)
+            }
+            p {
+                margin:0;
+                margin-bottom: 10px;
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+            .bottom-left {
+            
+                position: absolute;
+                color: white;
+                bottom: 40px;
+                left: 40px;
+            }
+            .bottom-right {
+                position: absolute;
+                color: white;
+                bottom: 40px;
+                right: 40px;
+                text-align: right;
+            }
+            
         }
        } 
     }
