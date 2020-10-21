@@ -56,7 +56,7 @@ export default {
       animYear: 1990
     }
   },
-  async mounted() {
+  created() {
     this.map  = [
   require('@/assets/map/0001.png'),
 require('@/assets/map/0002.png'),
@@ -99,6 +99,8 @@ require('@/assets/map/0038.png'),
 require('@/assets/map/0039.png'),
 require('@/assets/map/0040.png')
 ]
+  },
+  async mounted() {
     await this.callTrees()
     console.log('treee',this.data_arbres)
     this.opened_2020 = this.data_ev.filter(item => item.fields.annee_ouverture === "2020");
