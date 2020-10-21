@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <transition name="fade">
-    <div v-show="!isLoading" class="inner-wrapper">
+    <div v-show="!isLoading && !rockIsLoading" class="inner-wrapper">
       <div class="bg"></div>
     <div class="headline">
       <canvas class="rock"></canvas>
@@ -26,9 +26,9 @@
     </div>
     </transition>
     <transition name="fade">
-    <div class="loader" v-if='isLoading'>
+    <div class="loader" v-if='isLoading && !ockIsLoading'>
         <h1>Green Spaces</h1>
-        <p>counting the trees, breathing the air, drawing graphs...</p>
+        <p>counting trees, breathing air, drawing graphs... oh ! a beautiful rock !</p>
     </div>
     </transition>
   </div>
@@ -63,7 +63,8 @@ export default {
       data_arbres:{},
       floreReady:false,
       tree_species:[],
-      isLoading:true
+      isLoading:true,
+      rockIsLoading:true
     }
   },
   async mounted() {
@@ -73,6 +74,7 @@ export default {
   },
   methods: {
     addRock() {
+      var self = this;
       // move the rock
       const canvas = document.querySelector('.rock')
       let time = 0
@@ -102,17 +104,17 @@ export default {
         map: texture,
       })
 
-      loader.load('/untitled.glb', (gltf) => {
+      loader.load('/rock_.glb', (gltf) => {
         // called when the resource is loaded
-
+        self.rockIsLoading = false;
         // pointing Mesh
         model = gltf.scene.children[0]
         // Overiding Material
         model.material = material
-        model.position.y = 0
-        model.scale.x = 5.2
-        model.scale.y = 5.2
-        model.scale.z = 5.2
+        model.position.y = 2
+        model.scale.x = 13
+        model.scale.y = 13
+        model.scale.z = 13
         // Add to scene
         scene.add(model)
         let pointLight = new THREE.PointLight(0xffffff, 1)
