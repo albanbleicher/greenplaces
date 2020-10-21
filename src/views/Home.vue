@@ -1,27 +1,36 @@
 <template>
-  <div class="home">
-    <div class="bg"></div>
+  <div class="wrapper">
+    <transition name="fade">
+    <div v-show="!isLoading" class="inner-wrapper">
+      <div class="bg"></div>
     <div class="headline">
       <canvas class="rock"></canvas>
       <div class="headline-content">
-        <h1>Green places</h1>
+        <h1>Green Spaces</h1>
         <p>Walk barefoot in the city</p>
       </div>
       <a href="#" class="cta-scroll"><img src="../assets/icons/arrow-down.svg" alt="Scroll to discover"></a>
       <div class="headline-data">
         <div class="bottom-left">
           <p><span class="label">Pollution :</span> {{pollution.toPrecision(4)}}%</p>
-          <p><span class="label">Superficie :</span> {{displayed_superficie.toPrecision(5)}} km²</p>
+          <p><span class="label">Superficie :</span> {{displayed_superficie.toPrecision(4)}} km²</p>
         </div>
         <div class="bottom-right">
-          <p><span class="label">Espèces végétales :</span> {{pollution.toPrecision(4)}}%</p>
+          <p><span class="label">Espèces végétales :</span> {{tree_species.length}}</p>
           <p><span class="label">Espaces verts :</span> {{ev_count}}</p>
         </div>
       </div>
+    </div>  
+    <Timeline v-if='floreReady' :data_ev="places" :prop1970="proportionalite_ev_1970" :superficie1970="superficie_ev_1970" :data_arbres='data_arbres'/>
+    <FloreParis v-if='floreReady' :data='data_arbres'/>
     </div>
-    <!-- <div class="timeline">
-      <Timeline/>
-    </div> -->
+    </transition>
+    <transition name="fade">
+    <div class="loader" v-if='isLoading'>
+        <h1>Green Spaces</h1>
+        <p>counting the trees, breathing the air, drawing graphs...</p>
+    </div>
+    </transition>
   </div>
 </template>
 
@@ -33,17 +42,28 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import Timeline from '@/components/Timeline.vue'
 import axios from 'axios'
 import moment from 'vue-moment'
+import FloreParis from '../components/FloreParis'
 export default {
   name: 'Home',
+  components: {
+    Timeline,
+    FloreParis,
+  },
   data() {
     return {
       proportionalite_ev:0,
       superficie_ev: 0,
-      superficie_bois: 1.692e+7, // pas dispo depuis l'API :(
-      superficie_paris:1.054e+8, // 105.4 km2,
+      proportionalite_ev_1970:0,
+      superficie_ev_1970: 0,
+      superficie_bois: 1.9e+7, // pas dispo depuis l'API :(
+      superficie_paris:1.05e+8, // 105.4 km2,
       ev_count:0, // espaces verts, parcs et bois
       displayed_superficie:0,
-      pollution:0
+      pollution:0,
+      data_arbres:{},
+      floreReady:false,
+      tree_species:[],
+      isLoading:true
     }
   },
   async mounted() {
@@ -132,20 +152,58 @@ export default {
       (place) =>
         place.fields.categorie == "Bois" ||
         place.fields.categorie == "Espace Vert" ||
-        place.fields.categorie == "Parc"
-        
+        place.fields.categorie == "Parc" ||
+        place.fields.categorie == "Square" ||
+        place.fields.categorie == "Promenade" ||
+        place.fields.categorie == "Jardin"
     )
     this.places.forEach(element => {
       if(element.fields.categorie === "Espace Vert") {
         this.ev_count++;
       }
       if(element.fields.surface_totale_reelle) {
-        this.superficie_ev += parseInt(element.fields.surface_totale_reelle)
+      this.superficie_ev += element.fields.surface_totale_reelle
       }
       
     });
-    this.proportionalite_ev = (((this.superficie_ev+this.superficie_bois)/this.superficie_paris)*100).toPrecision(4)
-    this.displayed_superficie = Math.sqrt(this.superficie_ev+this.superficie_bois)
+    this.proportionalite_ev = (this.superficie_ev+this.superficie_bois) / this.superficie_paris
+    this.displayed_superficie =  (this.superficie_bois+this.superficie_ev)/1e+6
+    //pour 1970
+    let data_1970 = await axios.get(
+      'https://opendata.paris.fr/api/records/1.0/search/?dataset=espaces_verts&rows=2000'
+    )
+    this.places_1970 = data_1970.data.records.filter(
+      (place) =>
+        place.fields.categorie == "Bois" ||
+        place.fields.categorie == "Espace Vert" ||
+        place.fields.categorie == "Parc" &&
+        place.fields.annee_ouverture <= 1990
+        
+    )
+    this.places_1970.forEach(element => {
+      if(element.fields.categorie === "Espace Vert") {
+        this.ev_count++;
+      }
+      if(element.fields.surface_totale_reelle) {
+        this.superficie_ev_1970 += parseInt(element.fields.surface_totale_reelle)
+      }
+      
+    });
+    this.proportionalite_ev_1970 = (this.superficie_ev_1970+this.superficie_bois) / this.superficie_paris
+    this.superficie_ev_1970 =  (this.superficie_bois+this.superficie_ev_1970)/1e+6
+    // data arbres
+
+     axios.get('https://opendata.paris.fr/api/records/1.0/search/?dataset=arbresremarquablesparis&rows=2000&q=&facet=genre&facet=espece&facet=stadedeveloppement&facet=varieteoucultivar&facet=dateplantation&facet=libellefrancais').then(response => {
+       this.data_arbres = response;
+       this.tree_species = []
+       response.data.records.forEach(item => {
+        if(!this.tree_species.includes(item.fields.espece)) {
+           this.tree_species.push(item.fields.espece)
+        }
+       })
+       console.log(this.tree_species)
+       this.floreReady=true
+     });
     },
     async getPollution() {
       let yesterday = new Date();
@@ -175,6 +233,7 @@ export default {
         somme+=item
       })
      this.pollution = ((somme/yesterdayReleves.length)/200)*100;
+     this.isLoading =false;
     } 
  },
 }

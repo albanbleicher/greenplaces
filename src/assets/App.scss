@@ -73,27 +73,50 @@
 @import './animations.scss';
 
 // Variables
-$main-light: #1A1A1A;
-$green: #EFECE4;
+$main: #1A1A1A;
+$alt: #EFECE4;
+$secondary:#059D5D;
 html, body {
     margin:0;
     padding:0;
-    background-color: $main-light;
+    background-color: $main;
     height: 100%;
     font-family: 'GTCinetypeRegular', 'Avenir', 'Open Sans', 'Arial', sans-serif;
 }
 .bg {
-    height: 1000px;
+    height: 1549px;
     width: 100%;
     position: absolute;
     top: 0;
-    z-index: 0;
     background-image: url('./bg.png');
 }
 #app {
     height: 100%;
-    .home {
+    .wrapper {
        height: 100%;
+       .inner-wrapper {
+           height: 100%;
+       }
+       .loader {
+           width: 100%;
+           height: 100%;
+           color: white;
+           display: flex;
+           justify-content: center;
+           align-items: center;
+           flex-direction: column;
+           h1 {
+               font-family: 'Lobular';
+               font-weight: normal;
+               font-size: 130px;
+               margin:0
+           }
+           p {
+               font-family: 'GTCinetypeLight', sans-serif;
+               font-size: 25px;
+               color: rgba(255,255,255,0.7);
+           }
+       }
        .headline {
            position: relative;
            height: 100%;
@@ -117,14 +140,14 @@ html, body {
             h1 {
                 margin: 0;
                 font-family: 'Lobular';
-                color: $green;
+                color: $alt;
                 font-size: 130px;
                 font-weight: normal;
 
             }
             p {
                 font-family: 'GTCinetypeRegular', sans-serif;
-                color: $green;
+                color: $alt;
                 font-size: 25px;
             }
             
@@ -162,5 +185,127 @@ html, body {
             
         }
        } 
+
+       .flore, .timeline {
+           margin:300px 0;
+           position: relative;
+           z-index: 2;
+           display: flex;
+           justify-content: center;
+           align-items: center;
+           flex-direction: column;
+           text-align: center;
+           .map {
+               width: 80%;
+           }
+           div.button {
+               color: white;
+               background-color: $main;
+               width: 100px;
+               height: 45px;
+               border-radius: 100%;
+               border: 3px solid $secondary;
+               display: flex;
+               justify-content: center;
+               align-items: center;
+               position: relative;
+               cursor: pointer;
+               &::before {
+                   position: absolute;
+                   width: 600px;
+                   height: 3px;
+                   content:'';
+                   background-color: $secondary;
+                   left: -300px;
+                   z-index: -20;
+               }
+               &::after {
+                position: absolute;
+                width: 300px;
+                height: 3px;
+                content:'';
+                background-color: $secondary;
+                right: -300px;
+                
+            }
+           }
+            
+           .navigate-years {
+               width: 50%;
+               display: flex;
+                   justify-content: center;
+                   align-items:center;
+                   color: white;
+                   font-size: 20px;
+                   img {
+                       cursor: pointer;
+                   }
+               div, span {
+                   width: 30%;
+               }
+               div {
+                   display: flex;
+                   justify-content: center;
+                   align-items:center;
+               }
+           }
+            .sub {
+                display: flex;
+                justify-content: center;
+           align-items: center;
+           flex-direction: column;
+           text-align: center;
+                h2 {
+                    margin: 0;
+                    font-family: 'Lobular';
+                    color: $alt;
+                    font-size: 60px;
+                    font-weight: normal;
+        
+                }
+                p {
+                    padding-top: 33px;
+                    color: rgba(255,255,255,0.50);
+                    margin:0;
+                    max-width: 400px;
+                    text-align: center;
+                }
+            }
+            .infos {
+                margin-top: 170px;
+                display: flex;
+                justify-content: space-around;
+                flex-wrap: wrap;
+                width: 100%;
+                .infos-element {
+                    width: 330px;
+                    color: rgba(255,255,255,0.5);
+                    b {
+                        color: white;
+                    }
+                    h2 {
+                        color: white;
+                    }
+                    ul {
+                        list-style: none;
+                        padding: 0;
+                        font-size: 13px;
+                        li {
+                            margin-bottom: 10px;
+                            &::before {
+                                content:'-';
+                                margin-right: 5px;
+                            }
+                        }
+                    }
+                }
+            }
+       }
     }
 }
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .8s;
+  }
+  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
+  }
