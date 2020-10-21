@@ -229,7 +229,9 @@ html, body {
                 
             }
            }
-            
+            .loader {
+                display: none;
+            }
            .navigate-years {
                width: 50%;
                display: flex;

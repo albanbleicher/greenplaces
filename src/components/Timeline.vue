@@ -4,6 +4,7 @@
             <h2>Parc atlas</h2>
         <p>Vue d'ensemble des parcs, jardins et autres espaces verts ouverts à Paris depuis 1970</p>
         </div>
+        <img v-for="(image, key) in map" :src="image" alt="img" :key='key' class="loader">
         <img class="map" :src="map[mapImage]" alt="Map">
         <div class="navigate-years">
           <div class="back">
@@ -57,54 +58,55 @@ export default {
     }
   },
   created() {
-    this.map  = [
-  require('@/assets/map/0001.png'),
-require('@/assets/map/0002.png'),
-require('@/assets/map/0003.png'),
-require('@/assets/map/0004.png'),
-require('@/assets/map/0005.png'),
-require('@/assets/map/0006.png'),
-require('@/assets/map/0007.png'),
-require('@/assets/map/0008.png'),
-require('@/assets/map/0009.png'),
-require('@/assets/map/0010.png'),
-require('@/assets/map/0011.png'),
-require('@/assets/map/0012.png'),
-require('@/assets/map/0013.png'),
-require('@/assets/map/0014.png'),
-require('@/assets/map/0015.png'),
-require('@/assets/map/0016.png'),
-require('@/assets/map/0017.png'),
-require('@/assets/map/0018.png'),
-require('@/assets/map/0019.png'),
-require('@/assets/map/0020.png'),
-require('@/assets/map/0021.png'),
-require('@/assets/map/0022.png'),
-require('@/assets/map/0023.png'),
-require('@/assets/map/0024.png'),
-require('@/assets/map/0025.png'),
-require('@/assets/map/0026.png'),
-require('@/assets/map/0027.png'),
-require('@/assets/map/0028.png'),
-require('@/assets/map/0029.png'),
-require('@/assets/map/0030.png'),
-require('@/assets/map/0031.png'),
-require('@/assets/map/0032.png'),
-require('@/assets/map/0033.png'),
-require('@/assets/map/0034.png'),
-require('@/assets/map/0035.png'),
-require('@/assets/map/0036.png'),
-require('@/assets/map/0037.png'),
-require('@/assets/map/0038.png'),
-require('@/assets/map/0039.png'),
-require('@/assets/map/0040.png')
-]
+
   },
   async mounted() {
     await this.callTrees()
     console.log('treee',this.data_arbres)
     this.opened_2020 = this.data_ev.filter(item => item.fields.annee_ouverture === "2020");
     this.doGraph();
+        this.map  = [
+  require('@/assets/map/1.png'),
+require('@/assets/map/2.png'),
+require('@/assets/map/3.png'),
+require('@/assets/map/4.png'),
+require('@/assets/map/5.png'),
+require('@/assets/map/6.png'),
+require('@/assets/map/7.png'),
+require('@/assets/map/8.png'),
+require('@/assets/map/9.png'),
+require('@/assets/map/10.png'),
+require('@/assets/map/11.png'),
+require('@/assets/map/12.png'),
+require('@/assets/map/13.png'),
+require('@/assets/map/14.png'),
+require('@/assets/map/15.png'),
+require('@/assets/map/16.png'),
+require('@/assets/map/17.png'),
+require('@/assets/map/18.png'),
+require('@/assets/map/19.png'),
+require('@/assets/map/20.png'),
+require('@/assets/map/21.png'),
+require('@/assets/map/22.png'),
+require('@/assets/map/23.png'),
+require('@/assets/map/24.png'),
+require('@/assets/map/25.png'),
+require('@/assets/map/26.png'),
+require('@/assets/map/27.png'),
+require('@/assets/map/28.png'),
+require('@/assets/map/29.png'),
+require('@/assets/map/30.png'),
+require('@/assets/map/31.png'),
+require('@/assets/map/32.png'),
+require('@/assets/map/33.png'),
+require('@/assets/map/34.png'),
+require('@/assets/map/35.png'),
+require('@/assets/map/36.png'),
+require('@/assets/map/37.png'),
+require('@/assets/map/38.png'),
+require('@/assets/map/39.png'),
+require('@/assets/map/40.png')
+]
 
   },
   methods: {
