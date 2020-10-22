@@ -83,17 +83,22 @@ html, body {
     height: 100%;
     font-family: 'GTCinetypeRegular', 'Avenir', 'Open Sans', 'Arial', sans-serif;
     position: relative;
-    &::before {
-        height: 550vh;
-        width: 100%;
-        position: absolute;
-        top: 0;
-        content:'';
-        background-size: 100% auto;
-        background-repeat: no-repeat;
-        background-image: url('./bg.png');
-        z-index: 3;
+    overflow: hidden;
+    .loaded {
+        overflow: scroll; background: #1A1A1A;
+        &::before {
+            height: 550vh;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            content:'';
+            background-size: 100% auto;
+            background-repeat: no-repeat;
+            background-image: url('./bg.png');
+            z-index: 3;
+        }
     }
+    
 }
 
 #app {

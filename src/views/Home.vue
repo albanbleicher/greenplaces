@@ -27,7 +27,7 @@
     <transition name="fade">
     <div class="loader" v-if='isLoading && !rockIsLoading'>
         <h1>Green Spaces</h1>
-        <p>counting trees, breathing air, drawing graphs... oh ! a beautiful rock !</p>
+        <p>Comptage des arbres, évaluation de l'air ambiant, tracé des graphiques, modélisations...</p>
     </div>
     </transition>
   </div>
@@ -114,6 +114,7 @@ export default {
         model.scale.x = 13
         model.scale.y = 13
         model.scale.z = 13
+        console.log(model)
         // Add to scene
         scene.add(model)
         let pointLight = new THREE.PointLight(0xffffff, 1)
@@ -231,7 +232,7 @@ export default {
       })
      this.pollution = ((somme/yesterdayReleves.length)/200)*100;
      this.isLoading =false;
-     document.body.style.overflow='scroll'
+     document.body.classList.add('loaded')
     } 
  },
 }
