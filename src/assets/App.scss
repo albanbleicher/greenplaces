@@ -82,16 +82,24 @@ html, body {
     background-color: $main;
     height: 100%;
     font-family: 'GTCinetypeRegular', 'Avenir', 'Open Sans', 'Arial', sans-serif;
+    position: relative;
+    &::before {
+        height: 550vh;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        content:'';
+        background-size: 100% auto;
+        background-repeat: no-repeat;
+        background-image: url('./bg.png');
+        z-index: 3;
+    }
 }
-.bg {
-    height: 1549px;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    background-image: url('./bg.png');
-}
+
 #app {
     height: 100%;
+    position: relative;
+    z-index: 9;
     .wrapper {
        height: 100%;
        .inner-wrapper {
@@ -124,6 +132,7 @@ html, body {
            justify-content: center;
            align-items: center;
            flex-direction: column;
+           z-index: 9;
            .rock {
             position: absolute;
             top: 0;
@@ -195,6 +204,7 @@ html, body {
            align-items: center;
            flex-direction: column;
            text-align: center;
+
            .map {
                width: 80%;
            }
@@ -237,7 +247,7 @@ html, body {
                display: flex;
                    justify-content: center;
                    align-items:center;
-                   color: white;
+                   color: $secondary;
                    font-size: 20px;
                    img {
                        cursor: pointer;
@@ -251,6 +261,93 @@ html, body {
                    align-items:center;
                }
            }
+
+           .navigate-trees {
+               padding: 40px 0;
+            width: 30%;
+            display: flex;
+                justify-content: center;
+                align-items:center;
+                color: $secondary;
+                font-size: 20px;
+                img {
+                    cursor: pointer;
+                }
+            div, span {
+                width: 30%;
+            }
+            div {
+                display: flex;
+                justify-content: center;
+                align-items:center;
+            }
+        }
+        .platanus, .bloom {
+            position: relative;
+            width: 100%;
+            .infos-tree {
+                position: absolute;
+                width: 100%;
+                ul {
+                    list-style: none;
+                    padding: 0;
+                    margin: 0;
+                    text-align: left;
+                    color: rgba(255,255,255,0.50);
+                    position: absolute;
+                    font-family: 'GTCinetypeLight',serif;
+                    left: 10%;
+                    span {
+                        color: white;
+                        font-family:'GTCinetypeBold', serif;
+                    }
+                    li {
+                        position: relative;
+                        margin-bottom: 10px;
+                        &:last-child {
+                            margin-bottom: 0;
+                        }
+                    }
+                    &:first-child {
+                        top: 250px;
+                        &::after {
+                            width:138px;
+                            height: 137px;
+                            position: absolute;
+                            content:'';
+                            background-image: url('./stat-left.svg');
+                            right: -138px;
+                            bottom: 0;
+                        }
+
+                    }
+                    &:last-child{
+                        text-align: right;
+                    right: 10%;
+                    width: auto;
+                    left: inherit;
+                    &::before {
+                        width:155px;
+                        height: 144px;
+                        position: absolute;
+                        content:'';
+                        background-image: url('./stat-right.svg');
+                        left: -165px;
+                        bottom: -50px;
+                    }
+                    
+                    }
+                }
+            }
+        }
+        .sub-info {
+            color: white !important;
+            display: flex;
+            img {
+                width: 20px;
+                margin-right: 10px;
+            }
+        }
             .sub {
                 display: flex;
                 justify-content: center;
@@ -271,6 +368,7 @@ html, body {
                     margin:0;
                     max-width: 400px;
                     text-align: center;
+                    
                 }
             }
             .infos {

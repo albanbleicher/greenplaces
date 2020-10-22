@@ -2,22 +2,21 @@
   <div class="wrapper">
     <transition name="fade">
     <div v-show="!isLoading && !rockIsLoading" class="inner-wrapper">
-      <div class="bg"></div>
     <div class="headline">
       <canvas class="rock"></canvas>
       <div class="headline-content">
         <h1>Green Spaces</h1>
-        <p>Walk barefoot in the city</p>
+        <p>Évolution de la végétation dans Paris</p>
       </div>
       <a href="#" class="cta-scroll"><img src="../assets/icons/arrow-down.svg" alt="Scroll to discover"></a>
       <div class="headline-data">
         <div class="bottom-left">
-          <p><span class="label">Pollution :</span> {{pollution.toPrecision(4)}}%</p>
-          <p><span class="label">Superficie :</span> {{displayed_superficie.toPrecision(4)}} km²</p>
+          <p><span class="label">Pollution </span> {{pollution.toPrecision(4)}}%</p>
+          <p><span class="label">Superficie </span> {{displayed_superficie.toPrecision(4)}} km²</p>
         </div>
         <div class="bottom-right">
-          <p><span class="label">Espèces végétales :</span> {{tree_species.length}}</p>
-          <p><span class="label">Espaces verts :</span> {{ev_count}}</p>
+          <p><span class="label">Espèces végétales </span> {{tree_species.length}}</p>
+          <p><span class="label">Espaces verts </span> {{ev_count}}</p>
         </div>
       </div>
     </div>  
@@ -26,7 +25,7 @@
     </div>
     </transition>
     <transition name="fade">
-    <div class="loader" v-if='isLoading && !ockIsLoading'>
+    <div class="loader" v-if='isLoading && !rockIsLoading'>
         <h1>Green Spaces</h1>
         <p>counting trees, breathing air, drawing graphs... oh ! a beautiful rock !</p>
     </div>
@@ -203,7 +202,6 @@ export default {
            this.tree_species.push(item.fields.espece)
         }
        })
-       console.log(this.tree_species)
        this.floreReady=true
      });
     },
@@ -214,7 +212,6 @@ export default {
       yesterday.setMinutes(0)
       yesterday.setSeconds(0)
       yesterday = yesterday.getDate() + '/'+yesterday.getMonth()+'/'+yesterday.getFullYear();
-      console.log(yesterday)
       // on récupère le taux de no2 dans l'air
       let data = await axios.get('https://services8.arcgis.com/gtmasQsdfwbDAQSQ/arcgis/rest/services/mes_idf_horaire_no2/FeatureServer/0/query?where=1%3D1&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=id+DESC&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pjson&token=')
       let releves = data.data.features;
@@ -224,9 +221,7 @@ export default {
         let itemDate = new Date(releves[i].attributes.date_debut);
         itemDate = itemDate.getDate() + '/'+itemDate.getMonth()+'/'+itemDate.getFullYear();
 
-      // console.log(itemDate)
       if(itemDate === yesterday) {
-        // console.log('match')
         yesterdayReleves.push(releves[i].attributes.valeur)
       }
       }
@@ -236,6 +231,7 @@ export default {
       })
      this.pollution = ((somme/yesterdayReleves.length)/200)*100;
      this.isLoading =false;
+     document.body.style.overflow='scroll'
     } 
  },
 }

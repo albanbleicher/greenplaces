@@ -3,6 +3,7 @@
     <div class="sub">
             <h2>Parc atlas</h2>
         <p>Vue d'ensemble des parcs, jardins et autres espaces verts ouverts à Paris depuis 1970</p>
+        <p class="sub-info"><img :src="require('@/assets/leaf.svg')" alt="Leaf">{{opened_2020.length}} espaces verts et parcs ouverts cette année</p>
         </div>
         <img v-for="(image, key) in map" :src="image" alt="img" :key='key' class="loader">
         <img class="map" :src="map[mapImage]" alt="Map">
@@ -32,7 +33,7 @@
       </div>
       <div class="infos-element">
         <h2>Typologie des espaces verts</h2>
-        <canvas id="myChart" width="300" height="300"></canvas>
+        <canvas id="myChart"></canvas>
         <p class="label" v-if='showLabel'>{{chartLabel}}  <b>{{chartValue}}</b></p>
         <!-- <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Repudiandae accusantium dicta voluptate fugit nulla est repellat nemo aliquid totam alias ad, molestiae, hic numquam placeat quibusdam temporibus rem minima officia!</p> -->
       </div>
@@ -62,7 +63,6 @@ export default {
   },
   async mounted() {
     await this.callTrees()
-    console.log('treee',this.data_arbres)
     this.opened_2020 = this.data_ev.filter(item => item.fields.annee_ouverture === "2020");
     this.doGraph();
         this.map  = [
@@ -111,16 +111,13 @@ require('@/assets/map/40.png')
   },
   methods: {
     moveLabel(e){
-      console.log('ok')
       var percentage = (this.animYear *100) / 2020;
-      console.log(percentage)
       
 
     },
     async callTrees(){
       // let response = await axios.get('https://opendata.paris.fr/api/records/1.0/search/?dataset=arbresremarquablesparis&q=&rows=500&facet=genre&facet=espece&facet=stadedeveloppement&facet=varieteoucultivar&facet=dateplantation&facet=libellefrancais');
       // this.trees = response.data.records;
-      // console.log(this.trees)
     }, 
     doGraph() {
       var self = this;
@@ -161,7 +158,7 @@ require('@/assets/map/40.png')
               '#069D5D',
               '#069D5D',
             ],
-            borderWidth: 10,
+            borderWidth: 5,
         }]
     },
     options: {
@@ -178,7 +175,6 @@ require('@/assets/map/40.png')
     else {
       self.showLabel = false;
     }
-      console.log(self.showLabel)
 
     }, 
       responsive:true,
