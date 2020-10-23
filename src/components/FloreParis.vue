@@ -145,6 +145,7 @@ export default {
       })
 
       loader.load('/bloom.glb', (gltf) => {
+        self.$emit('addLoaded')
         // called when the resource is loaded
         // pointing Mesh
 
@@ -241,6 +242,8 @@ export default {
       loader.load('/platane.glb', (gltf) => {
         // called when the resource is loaded
         // pointing Mesh
+        self.$emit('addLoaded')
+
         model = gltf.scene.children[4]
         console.log("PLATANE", model)
         // Overiding Material
@@ -301,6 +304,8 @@ model.position.x = -359
       let data_platanus = await axios.get(
         'https://opendata.paris.fr/api/records/1.0/search/?dataset=les-arbres&q=&rows=10000&facet=typeemplacement&facet=domanialite&facet=arrondissement&facet=libellefrancais&facet=genre&facet=espece&facet=varieteoucultivar&facet=circonferenceencm&facet=hauteurenm&facet=stadedeveloppement&facet=remarquable&refine.genre=Platanus'
       )
+        self.$emit('addLoaded')
+
       self.qt_platanus = data_platanus.data.nhits
       let circ_platanus = []
       let sum_circ_platanus = 0;
@@ -333,6 +338,8 @@ model.position.x = -359
       let data_aesculus = await axios.get(
         'https://opendata.paris.fr/api/records/1.0/search/?dataset=les-arbres&q=&facet=typeemplacement&facet=domanialite&rows=10000&facet=arrondissement&facet=libellefrancais&facet=genre&facet=espece&facet=varieteoucultivar&facet=circonferenceencm&facet=hauteurenm&facet=stadedeveloppement&facet=remarquable&refine.genre=Aesculus'
       )
+        self.$emit('addLoaded')
+
       self.qt_aesculus = data_aesculus.data.nhits
       let circ_aesculus = []
       let sum_circ_aesculus = 0;

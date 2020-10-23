@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <transition name="fade">
-    <div v-show="loading === 5" class="inner-wrapper">
+    <div v-show="loading === 9" class="inner-wrapper">
     <div class="headline">
       <canvas class="rock"></canvas>
       <div class="headline-content">
@@ -21,13 +21,17 @@
       </div>
     </div>  
     <Timeline v-if='floreReady' :data_ev="places" :prop1970="proportionalite_ev_1970" :superficie1970="superficie_ev_1970" :data_arbres='data_arbres'/>
-    <FloreParis v-if='floreReady' :data='data_arbres'/>
+    <FloreParis v-if='floreReady' :data='data_arbres' @addLoaded='loading+=1'/>
     </div>
     </transition>
     <transition name="fade">
-    <div class="loader" v-show='loading != 5'>
-        <h1>Green Spaces</h1>
-        <p>Comptage des arbres, évaluation de l'air ambiant, tracé des graphiques, modélisations...</p>
+    <div class="loader" v-show='loading != 9'>
+          <p>{{((loading/9)*100).toPrecision(3)}}%</p>
+
+        <div class="progress">
+          <div class="progress-value" :style="'width:'+(loading/9)*100+'%'"></div>
+        </div>
+        <p>{{loadingMessage}}</p>
     </div>
     </transition>
   </div>
@@ -62,7 +66,8 @@ export default {
       data_arbres:{},
       floreReady:false,
       tree_species:[],
-      loading:0
+      loading:0,
+      loadingMessage:"Évaluation de l'air"
     }
   },
   async mounted() {
@@ -236,8 +241,43 @@ export default {
       })
      this.pollution = ((somme/yesterdayReleves.length)/200)*100;
    
-     document.body.classList.add('loaded')
     } 
  },
+ watch: {
+   loading(now, old) {
+     if(now === 9) {
+     document.body.classList.add('loaded')
+     }
+     switch (now) {
+       case 1:
+         this.loadingMessage = "Recensement des arbres..."
+         break;
+         case 2:
+         this.loadingMessage = "Modélisation des arbres... "
+         break;
+         case 3:
+         this.loadingMessage = "Recensement des espaces verts ..."
+         break;
+         case 4:
+         this.loadingMessage = "Modélisation des espaces verts au fil du temps"
+         break;
+         case 5:
+         this.loadingMessage = "Oh, un beau rocher!"
+         break;
+         case 6:
+         this.loadingMessage = "Calcul de la circonférence des arbres"
+         break;
+         case 7:
+         this.loadingMessage = "Calcul de la hauteur des arbres"
+         break;
+         case 8:
+         this.loadingMessage = "Retranscription des données"
+         break;
+         case 9:
+         this.loadingMessage = "Tracé des graphiques"
+         break;
+     }
+   }
+ }
 }
 </script>

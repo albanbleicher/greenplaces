@@ -118,6 +118,16 @@ html, body {
            justify-content: center;
            align-items: center;
            flex-direction: column;
+           .progress {
+               width: 50%;
+               background-color: #fff;
+               height: 2px;
+               .progress-value {
+                   background-color: $secondary;
+                   height: 2px;
+                   transition: width 0.5s ease;
+               }
+           }
            h1 {
                font-family: 'Lobular';
                font-weight: normal;
