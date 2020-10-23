@@ -25,7 +25,7 @@
     </div>
     </transition>
     <transition name="fade">
-    <div class="loader" v-if='isLoading && !rockIsLoading'>
+    <div class="loader" v-show='isLoading && !rockIsLoading'>
         <h1>Green Spaces</h1>
         <p>Comptage des arbres, évaluation de l'air ambiant, tracé des graphiques, modélisations...</p>
     </div>
