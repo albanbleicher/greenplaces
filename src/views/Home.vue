@@ -41,10 +41,8 @@
 // @ is an alias to /src
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import Timeline from '@/components/Timeline.vue'
 import axios from 'axios'
-import moment from 'vue-moment'
 import FloreParis from '../components/FloreParis'
 export default {
   name: 'Home',
@@ -216,8 +214,9 @@ export default {
     async getPollution() {
       var self = this;
       let yesterday = new Date();
+if(yesterday.getHours()<10) {
       yesterday.setDate(yesterday.getDate() - 1);
-      yesterday.setHours(0)
+}      yesterday.setHours(0)
       yesterday.setMinutes(0)
       yesterday.setSeconds(0)
       yesterday = yesterday.getDate() + '/'+yesterday.getMonth()+'/'+yesterday.getFullYear();
@@ -244,7 +243,7 @@ export default {
     } 
  },
  watch: {
-   loading(now, old) {
+   loading(now) {
      if(now === 9) {
      document.body.classList.add('loaded')
      }
