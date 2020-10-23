@@ -114,7 +114,6 @@ export default {
         model.scale.x = 13
         model.scale.y = 13
         model.scale.z = 13
-        console.log(model)
         // Add to scene
         scene.add(model)
         let pointLight = new THREE.PointLight(0xffffff, 1)

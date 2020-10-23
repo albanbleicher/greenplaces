@@ -3,11 +3,8 @@
     <div class="sub">
             <h2>Parc atlas</h2>
         <p>Vue d'ensemble des parcs, jardins et autres espaces verts ouverts à Paris depuis 1970</p>
-        <p class="sub-info"><img :src="require('@/assets/leaf.svg')" alt="Leaf">{{opened_2020.length}} espaces verts et parcs ouverts cette année</p>
         </div>
-        <img v-for="(image, key) in map" :src="image" alt="img" :key='key' class="loader">
-        <img class="map" :src="map[mapImage]" alt="Map">
-        <div class="navigate-years">
+          <div class="navigate-years">
           <div class="back">
             <transition name="fade">
           <img @click="doAnimation" v-if='animYear===2020' src="@/assets/icons/arrow-left.svg" alt="Passé">
@@ -20,6 +17,10 @@
             </transition>
           </div>
         </div>
+        <p class="sub-info"><img :src="require('@/assets/leaf.svg')" alt="Leaf">{{opened_2020.length}} espaces verts et parcs ouverts cette année</p>
+
+        <img v-for="(image, key) in map" :src="image" alt="img" :key='key' class="loader">
+        <img class="map" :src="map[mapImage]" alt="Map">
     <div class="infos">
       <div class="infos-element">
         <h2>Surface</h2>

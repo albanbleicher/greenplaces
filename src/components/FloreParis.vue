@@ -43,7 +43,7 @@
         <ul class="circ-infos">
           <li>Circonférence minimum <span>{{stat_platanus[0][0].toPrecision(3)}} cm</span></li>
           <li>Circonférence moyenne <span>{{stat_platanus[0][1].toPrecision(3)}} cm</span></li>
-          <li>Circonférence maximum <span>{{stat_platanus[0][2].toPrecision(8)}} cm</span></li>
+          <li>Circonférence maximum <span>{{stat_platanus[0][2].toPrecision(4)}} cm</span></li>
         </ul>
         <ul class="hauteur-infos">
           <li>Hauteur minimum <span>{{stat_platanus[1][0].toPrecision(3)}} m</span></li>
@@ -58,7 +58,7 @@
         <ul class="circ-infos">
           <li>Circonférence minimum <span>{{stat_aesculus[0][0].toPrecision(3)}} cm</span></li>
           <li>Circonférence moyenne <span>{{stat_aesculus[0][1].toPrecision(3)}} cm</span></li>
-          <li>Circonférence maximum <span>{{stat_aesculus[0][2].toPrecision(8)}} cm</span></li>
+          <li>Circonférence maximum <span>{{stat_aesculus[0][2].toPrecision(4)}} cm</span></li>
         </ul>
         <ul class="hauteur-infos">
           <li>Hauteur minimum <span>{{stat_aesculus[1][0].toPrecision(3)}} m</span></li>
@@ -82,6 +82,7 @@
 import axios from 'axios'
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 
 export default {
   data() {
@@ -94,7 +95,6 @@ export default {
     }
   },
   async mounted() {
-    // console.log(this.data)
     this.addPlatane()
     this.addAesculus()
     await this.loadDataPlatane()
@@ -147,10 +147,12 @@ export default {
       loader.load('/bloom.glb', (gltf) => {
         // called when the resource is loaded
         // pointing Mesh
+
         model = gltf.scene
+        model.material = new THREE.MeshNormalMaterial()
         // Overiding Material
-        model.children[5].material = material_wood
-        model.children[5].children.forEach((item) => {
+        model.children[1].material = material_wood
+        model.children[1].children.forEach((item) => {
           if (item.name.includes('Cube')) {
             item.material = material_feuille
           }
@@ -168,7 +170,7 @@ export default {
           }
         })
 
-        model.position.y = -40
+        model.position.y = -20
         model.position.x = -15
         model.scale.x = 22
         model.scale.y = 22
@@ -180,18 +182,15 @@ export default {
         renderer.setSize(window.innerWidth, window.innerHeight)
         renderer.setPixelRatio(window.devicePixelRatio)
       })
-
-      camera.position.z = 80
-      camera.position.y = 18
-
+      camera.position.y = 20
+      camera.position.z = 106
       // à chaque image : 60fps
       const update = () => {
         requestAnimationFrame(update)
         time += 0.009
         if (model) {
-            model.rotation.y = time;
+            model.children[1].rotation.y = time;
         }
-
         // Render WebGL Scene
         renderer.render(scene, camera)
       }
@@ -239,42 +238,48 @@ export default {
       let material_cht = new THREE.MeshBasicMaterial({
         map: cht,
       })
-
       loader.load('/platane.glb', (gltf) => {
         // called when the resource is loaded
         // pointing Mesh
-        model = gltf.scene
+        model = gltf.scene.children[4]
+        console.log("PLATANE", model)
         // Overiding Material
          // Add to scene
         
-        let pointLight = new THREE.PointLight(0xffffff, 5)
+        let pointLight = new THREE.PointLight(0xffffff, 3)
         pointLight.position.x = -20
         pointLight.position.y = 20
         scene.add(pointLight)
 
         let ambientLight = new THREE.AmbientLight(0x111111)
         scene.add(ambientLight)
-        model.children[4].material = material_wood
-        model.children[4].geometry.attributes.position.count=33
-        model.children[5].material = material_feuille
+        model.material = material_wood
+        model.geometry.attributes.position.count=33
+model.position.x = -359
+      model.position.y = 1078
+      model.position.z = -322
+      model.rotation.z = -322
      
-
-        model.position.y =200
-        model.position.x = -15
         model.scale.x = 22
         model.scale.y = 22
         model.scale.z = 22
         // Add to scene
         scene.add(model)
-        console.log(model)
+
       })
+        // var controls = new OrbitControls( camera, renderer.domElement );
+        // controls.update();
+
       window.addEventListener('resize', () => {
         renderer.setSize(window.innerWidth, window.innerHeight)
         renderer.setPixelRatio(window.devicePixelRatio)
       })
 
-      camera.position.z = 700
-      camera.position.y = -20
+      
+      camera.position.x = -259
+      camera.position.y = 878
+      camera.position.z = 500
+
 
       // à chaque image : 60fps
       const update = () => {
@@ -282,7 +287,9 @@ export default {
         time += 0.01
         if (model) {
             model.rotation.y = time;
+
         }
+        // controls.update()
 
         // Render WebGL Scene
         renderer.render(scene, camera)
@@ -295,7 +302,6 @@ export default {
         'https://opendata.paris.fr/api/records/1.0/search/?dataset=les-arbres&q=&rows=10000&facet=typeemplacement&facet=domanialite&facet=arrondissement&facet=libellefrancais&facet=genre&facet=espece&facet=varieteoucultivar&facet=circonferenceencm&facet=hauteurenm&facet=stadedeveloppement&facet=remarquable&refine.genre=Platanus'
       )
       self.qt_platanus = data_platanus.data.nhits
-     console.log(self.qt_platanus)
       let circ_platanus = []
       let sum_circ_platanus = 0;
       let ht_platanus = []
@@ -303,7 +309,8 @@ export default {
       data_platanus.data.records.forEach((tree, i) => {
         if (
           tree.fields.circonferenceencm &&
-          tree.fields.circonferenceencm > 0
+          tree.fields.circonferenceencm > 0 &&
+          tree.fields.circonferenceencm < 455
         ) {
           circ_platanus.push(tree.fields.circonferenceencm)
           sum_circ_platanus += tree.fields.circonferenceencm
@@ -317,11 +324,9 @@ export default {
           sum_ht_platanus += tree.fields.hauteurenm
         }
       })
-     console.log(ht_platanus)
       self.stat_platanus= [
           [Math.min.apply(Math, circ_platanus),sum_circ_platanus / circ_platanus.length,Math.max.apply(Math, circ_platanus)],
           [Math.min.apply(Math, ht_platanus),sum_ht_platanus / ht_platanus.length,Math.max.apply(Math, ht_platanus)]]
-        console.log(self.stat_platanus)
     },
     async loadDataAesculus() {
         var self = this;
@@ -350,11 +355,9 @@ export default {
           sum_ht_aesculus += tree.fields.hauteurenm
         }
       })
-     console.log(ht_aesculus)
       self.stat_aesculus= [
           [Math.min.apply(Math, circ_aesculus),sum_circ_aesculus / circ_aesculus.length,Math.max.apply(Math, circ_aesculus)],
           [Math.min.apply(Math, ht_aesculus),sum_ht_aesculus / ht_aesculus.length,Math.max.apply(Math, ht_aesculus)]]
-        console.log(self.stat_aesculus)
     },
     
   },
