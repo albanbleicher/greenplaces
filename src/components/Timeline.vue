@@ -13,7 +13,7 @@
           <div class="label">{{animYear}}</div>
           <div class="now">
             <transition name="fade">
-          <img @click="doAnimation" v-if="animYear===1990" src="@/assets/icons/arrow-right.svg" alt="Présent">
+          <img @click="doAnimation" v-if="animYear===1970" src="@/assets/icons/arrow-right.svg" alt="Présent">
             </transition>
           </div>
         </div>
@@ -56,7 +56,7 @@ export default {
       chartValue:'',
       map: [],
       mapImage:0,
-      animYear: 1990
+      animYear: 1970
     }
   },
   created() {
@@ -204,7 +204,7 @@ require('@/assets/map/40.png')
     doAnimation() {
       var self = this;
       let add, remove
-      if(self.animYear === 1990) {
+      if(self.animYear === 1970) {
         add = setInterval(()=>{
           self.mapImage <39 ? self.mapImage++ : clearInterval(add)
         },30)
@@ -214,7 +214,7 @@ require('@/assets/map/40.png')
 remove = setInterval(()=>{
           self.mapImage >0 ? self.mapImage-- : clearInterval(remove)
         },30)
-        self.animYear = 1990
+        self.animYear = 1970
       }
     }
   },
