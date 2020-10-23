@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <transition name="fade">
-    <div v-show="!isLoading && !rockIsLoading" class="inner-wrapper">
+    <div v-show="loading === 5" class="inner-wrapper">
     <div class="headline">
       <canvas class="rock"></canvas>
       <div class="headline-content">
@@ -25,7 +25,7 @@
     </div>
     </transition>
     <transition name="fade">
-    <div class="loader" v-show='isLoading && rockIsLoading'>
+    <div class="loader" v-show='loading != 5'>
         <h1>Green Spaces</h1>
         <p>Comptage des arbres, évaluation de l'air ambiant, tracé des graphiques, modélisations...</p>
     </div>
@@ -62,8 +62,7 @@ export default {
       data_arbres:{},
       floreReady:false,
       tree_species:[],
-      isLoading:true,
-      rockIsLoading:true
+      loading:0
     }
   },
   async mounted() {
@@ -104,8 +103,7 @@ export default {
       })
 
       loader.load('/rock_.glb', (gltf) => {
-        // called when the resource is loaded
-        self.rockIsLoading = false;
+        self.loading+=1;
         // pointing Mesh
         model = gltf.scene.children[0]
         // Overiding Material
@@ -146,9 +144,11 @@ export default {
       requestAnimationFrame(update)
     },
     async loadData() {
+      var self = this;
       let data = await axios.get(
       'https://opendata.paris.fr/api/records/1.0/search/?dataset=espaces_verts&rows=2000'
     )
+      self.loading+=1;
     this.places = data.data.records.filter(
       (place) =>
         place.fields.categorie == "Bois" ||
@@ -173,6 +173,8 @@ export default {
     let data_1970 = await axios.get(
       'https://opendata.paris.fr/api/records/1.0/search/?dataset=espaces_verts&rows=2000'
     )
+      self.loading +=1
+
     this.places_1970 = data_1970.data.records.filter(
       (place) =>
         place.fields.categorie == "Bois" ||
@@ -195,6 +197,7 @@ export default {
     // data arbres
 
      axios.get('https://opendata.paris.fr/api/records/1.0/search/?dataset=arbresremarquablesparis&rows=2000&q=&facet=genre&facet=espece&facet=stadedeveloppement&facet=varieteoucultivar&facet=dateplantation&facet=libellefrancais').then(response => {
+       self.loading+=1;
        this.data_arbres = response;
        this.tree_species = []
        response.data.records.forEach(item => {
@@ -206,6 +209,7 @@ export default {
      });
     },
     async getPollution() {
+      var self = this;
       let yesterday = new Date();
       yesterday.setDate(yesterday.getDate() - 1);
       yesterday.setHours(0)
@@ -214,6 +218,7 @@ export default {
       yesterday = yesterday.getDate() + '/'+yesterday.getMonth()+'/'+yesterday.getFullYear();
       // on récupère le taux de no2 dans l'air
       let data = await axios.get('https://services8.arcgis.com/gtmasQsdfwbDAQSQ/arcgis/rest/services/mes_idf_horaire_no2/FeatureServer/0/query?where=1%3D1&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=id+DESC&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pjson&token=')
+        self.loading+=1
       let releves = data.data.features;
 
       let yesterdayReleves = []
@@ -230,7 +235,7 @@ export default {
         somme+=item
       })
      this.pollution = ((somme/yesterdayReleves.length)/200)*100;
-     this.isLoading =false;
+   
      document.body.classList.add('loaded')
     } 
  },
