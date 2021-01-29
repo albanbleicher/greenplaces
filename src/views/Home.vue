@@ -11,7 +11,7 @@
       <a href="#" class="cta-scroll"><img src="../assets/icons/arrow-down.svg" alt="Scroll to discover"></a>
       <div class="headline-data">
         <div class="bottom-left">
-          <p><span class="label">Pollution </span> {{pollution.toPrecision(4)}}%</p>
+          <p><span class="label">Pollution </span> 8.4%</p>
           <p><span class="label">Superficie </span> {{displayed_superficie.toPrecision(4)}} km²</p>
         </div>
         <div class="bottom-right">
